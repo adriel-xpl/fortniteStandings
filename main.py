@@ -4,11 +4,12 @@ import helperFunctions as hf
 import team as T
 import player as P
 
-reg_file = "Fortnite Roster Submission (3).csv"
+csvFolder = "data/"
+reg_file = csvFolder + "Fortnite Roster Submission (3).csv"
 reg_list = hf.process_data(reg_file)
 
-g1_round1_file = "SpringA2021_Group1_Gold_W7_R1.csv"
-g1_round2_file = "SpringA2021_Group1_Gold_W7_R2.csv"
+g1_round1_file = csvFolder + "SpringA2021_Group1_Gold_W7_R1.csv"
+g1_round2_file = csvFolder + "SpringA2021_Group1_Gold_W7_R2.csv"
 
 # team row list
 g1_round1_teams_list = hf.collect_data(g1_round1_file)
@@ -18,8 +19,8 @@ g1_round2_teams_list = hf.collect_data(g1_round2_file)
 g1_round1_teams = hf.create_teams(g1_round1_teams_list)
 g1_round2_teams = hf.create_teams(g1_round2_teams_list)
 
-g2_round1_file = "D7 G R1 - Grp2.csv"
-g2_round2_file = "D7 G R2 - Grp2.csv"
+g2_round1_file = csvFolder + "D7 G R1 - Grp2.csv"
+g2_round2_file = csvFolder + "D7 G R2 - Grp2.csv"
 
 # team row list
 g2_round1_teams_list = hf.collect_data(g2_round1_file)
