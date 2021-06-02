@@ -3,23 +3,23 @@ import team as T
 import player as P
 
 
-def collect_data1(fileName):
-    with open(fileName, 'r+', encoding='utf-16') as round:
-        rows = round.readlines()
-        teams_this_round = []
-        curr_placement = 1
-        team_lst = []
-        for i in range(len(rows)):
-            row = rows[i].replace("\n","").split(',')
-            if int(row[1]) > curr_placement:
-                curr_placement = int(row[1])
-                teams_this_round.append(team_lst)
-                team_lst = []
-                team_lst.append(row)
-            else:
-                team_lst.append(row)
+# def collect_data1(fileName):
+#     with open(fileName, 'r+', encoding='utf-16') as round:
+#         rows = round.readlines()
+#         teams_this_round = []
+#         curr_placement = 1
+#         team_lst = []
+#         for i in range(len(rows)):
+#             row = rows[i].replace("\n","").split(',')
+#             if int(row[1]) > curr_placement:
+#                 curr_placement = int(row[1])
+#                 teams_this_round.append(team_lst)
+#                 team_lst = []
+#                 team_lst.append(row)
+#             else:
+#                 team_lst.append(row)
 
-    return teams_this_round     
+#     return teams_this_round     
 
 def collect_data(filename):
     with open(filename, newline='\n') as round:

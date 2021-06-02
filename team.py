@@ -1,14 +1,14 @@
 class Team:
 
 
-    def __init__(self, team=[],  placement=0, kills=0, team_name=""):
+    def __init__(self, team=[],  placement=0, kills=0, team_name="", rank=""):
         self.team = []
         self.team_name = team_name
         self.placement = int(placement)
         self.total_kills = 0
         self.add_kill_point(int(kills))
-        self.round1 = False
-        self.round2 = False
+        self.rank = rank
+
         
 
     def get_placement(self):
@@ -42,31 +42,37 @@ class Team:
     def get_total_kills(self):
         return self.total_kills
     
-    def add_kill_point(self, kills):
-        self.total_kills += int(kills)
-
+    def get_team_name(self):
+        return self.team_name    
+    
     def get_team(self):
         return self.team
+    
+    def get_rank(self):
+        return self.rank
+    
+    def add_kill_point(self, kills):
+        self.total_kills += int(kills)   
+
+    def add_player(self, player):
+        self.team.append(player.get_gamertag())
+        self.add_kill_point(player.kills)     
 
     def set_placement(self, placement):
         self.placement = placement
 
     def set_team(self, lst):
         self.team = lst
-
-    def add_player(self, player):
-        self.team.append(player.get_gamertag())
-        self.add_kill_point(player.kills)
         
-    
     def set_team_kills(self, tk):
         self.total_kills = tk
     
-    def get_team_name(self):
-        return self.team_name
-    
+
     def set_team_name(self, name):
         self.team_name = name
+    
+    def set_rank(self, rank):
+        self.rank = rank
     
     
     def __str__(self):

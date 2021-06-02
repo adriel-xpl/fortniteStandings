@@ -23,21 +23,6 @@ def initGroup(round1Filename, round2Filename):
 
     return g_round1_teams, g_round2_teams
 
-
-# def initGroup2(round1Filename, round2Filename):
-
-#     g2_round1_file = csvFolder + ""
-#     g2_round2_file = csvFolder + ""
-
-#     # team row list
-#     g2_round1_teams_list = hf.collect_data(g2_round1_file)
-#     g2_round2_teams_list = hf.collect_data(g2_round2_file)
-
-#     # create team obj from row list
-#     g2_round1_teams = hf.create_teams(g2_round1_teams_list)
-#     g2_round2_teams = hf.create_teams(g2_round2_teams_list)
-
-#     return g2_round1_teams, g2_round2_teams
 # ID's the team and gives it it's name
 def process_team_names(reg_list, teams_in_round):
     for reg in reg_list:
@@ -47,7 +32,7 @@ def process_team_names(reg_list, teams_in_round):
             
             if reg[2].lower() in team_list:
                 team.team_name = reg[3]
-                team.round1 = True
+                # team.rank = str(reg[9]).strip().lower()
 
 # prints team object to the console [helper]
 def print_teams_in_round(team_list, label):
@@ -101,14 +86,10 @@ def generate_csv(lst, filename="output.csv"):
 
         writer.writeheader()
         found_flag = []
-        # for team in both_rounds:
-        #     if not team.get_team_name() in found_flag or team.get_team_name() == "":
-        #         found_flag.append(team.get_team_name())
-        #         found_teams.append(team)
         for team in lst:
-            # if not team in found_flag:
-            #     found_flag.append(team)
-            writer.writerow({'Teams': team.get_team_name(), 'Placement Points': team.get_placement_points(), 'Elimination Points': team.get_total_kills(), 'Total Points': team.get_total_points(), 'Players':team.get_team() })
+            if not (team.get_team_name, team.get_rank) in found_flag:
+                found_flag.append((team.get_team_name, team.get_rank))
+                writer.writerow({'Teams': team.get_team_name(), 'Placement Points': team.get_placement_points(), 'Elimination Points': team.get_total_kills(), 'Total Points': team.get_total_points(), 'Players':team.get_team() })
 
         print("output file generated")
 
@@ -150,6 +131,5 @@ def main():
 
         outputFilename = input("Enter ouput file name: ")
         generate_csv(group_placements, outputFilename + ".csv")
-
 
 main()
