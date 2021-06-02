@@ -1,5 +1,4 @@
 import csv
-import requests
 import team as T
 import player as P
 

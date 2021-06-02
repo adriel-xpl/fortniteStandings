@@ -1,35 +1,43 @@
 import csv
-import tkinter as tk
 import helperFunctions as hf
 import team as T
 import player as P
 
-csvFolder = "data/"
-reg_file = csvFolder + "Fortnite Roster Submission (3).csv"
+# csvFolder = "\data\working\\""
+reg_file = "Fortnite Roster Submission (4).csv"
 reg_list = hf.process_data(reg_file)
 
-g1_round1_file = csvFolder + "SpringA2021_Group1_Gold_W7_R1.csv"
-g1_round2_file = csvFolder + "SpringA2021_Group1_Gold_W7_R2.csv"
 
-# team row list
-g1_round1_teams_list = hf.collect_data(g1_round1_file)
-g1_round2_teams_list = hf.collect_data(g1_round2_file)
 
-# create team obj from row list
-g1_round1_teams = hf.create_teams(g1_round1_teams_list)
-g1_round2_teams = hf.create_teams(g1_round2_teams_list)
+def initGroup(round1Filename, round2Filename):
+    g_round1_file =  round1Filename 
+    g_round2_file =  round2Filename
 
-g2_round1_file = csvFolder + "D7 G R1 - Grp2.csv"
-g2_round2_file = csvFolder + "D7 G R2 - Grp2.csv"
+    # team row list
+    g_round1_teams_list = hf.collect_data(g_round1_file)
+    g_round2_teams_list = hf.collect_data(g_round2_file)
 
-# team row list
-g2_round1_teams_list = hf.collect_data(g2_round1_file)
-g2_round2_teams_list = hf.collect_data(g2_round2_file)
+    # create team obj from row list
+    g_round1_teams = hf.create_teams(g_round1_teams_list)
+    g_round2_teams = hf.create_teams(g_round2_teams_list)
 
-# create team obj from row list
-g2_round1_teams = hf.create_teams(g2_round1_teams_list)
-g2_round2_teams = hf.create_teams(g2_round2_teams_list)
+    return g_round1_teams, g_round2_teams
 
+
+# def initGroup2(round1Filename, round2Filename):
+
+#     g2_round1_file = csvFolder + ""
+#     g2_round2_file = csvFolder + ""
+
+#     # team row list
+#     g2_round1_teams_list = hf.collect_data(g2_round1_file)
+#     g2_round2_teams_list = hf.collect_data(g2_round2_file)
+
+#     # create team obj from row list
+#     g2_round1_teams = hf.create_teams(g2_round1_teams_list)
+#     g2_round2_teams = hf.create_teams(g2_round2_teams_list)
+
+#     return g2_round1_teams, g2_round2_teams
 # ID's the team and gives it it's name
 def process_team_names(reg_list, teams_in_round):
     for reg in reg_list:
@@ -86,8 +94,8 @@ def fill_missing_team_names(found_teams):
             missing_data = False if cont.lower() == 'y' else True
 
 # generates a CSV ouput file with the necesarry columns for LeagueSpot
-def generate_csv(lst):
-    with open('outputFile.csv', mode='w', encoding='utf-16') as csv_file:
+def generate_csv(lst, filename="output.csv"):
+    with open(filename, mode='w', encoding='utf-16') as csv_file:
         fieldnames = ['Teams', 'Placement Points', 'Elimination Points', 'Total Points', 'Players']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
@@ -98,29 +106,50 @@ def generate_csv(lst):
         #         found_flag.append(team.get_team_name())
         #         found_teams.append(team)
         for team in lst:
-            if not team in found_flag:
-                found_flag.append(team)
-                writer.writerow({'Teams': team.get_team_name(), 'Placement Points': team.get_placement_points(), 'Elimination Points': team.get_total_kills(), 'Total Points': team.get_total_points(), 'Players':team.get_team() })
+            # if not team in found_flag:
+            #     found_flag.append(team)
+            writer.writerow({'Teams': team.get_team_name(), 'Placement Points': team.get_placement_points(), 'Elimination Points': team.get_total_kills(), 'Total Points': team.get_total_points(), 'Players':team.get_team() })
 
         print("output file generated")
 
 def main():
-    all_rounds_in_group = [g1_round1_teams, g1_round2_teams, g2_round1_teams, g2_round2_teams]
-    for teams in all_rounds_in_group:
-        process_team_names(reg_list=reg_list, teams_in_round=teams)
-        # print_teams_in_round(teams, "teams in round")
-    
-    group1 = process_group_placements(g1_round1_teams, g1_round2_teams)
-    # print_teams_in_round(teams, "---------------------------------------------------------------------------")
-    group2 = process_group_placements(g2_round1_teams, g2_round2_teams)
+    process_mode = input("do you wan to process one group or both at the same time: (1 or 2)")
 
-    group_placements = combine_groups(group1, group2)
-    # for team in group_placements:
-    #     print(team)
-    print_teams_in_round(group_placements, "----------------------------------final placements-----------------------------------------")
-    # fill_missing_team_names(group_placements)
+    if process_mode == '1':
+        g1_round1, g1_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
+        all_rounds_in_group = [g1_round1, g1_round2]
+        for teams in all_rounds_in_group:
+            process_team_names(reg_list=reg_list, teams_in_round=teams)
+            # print_teams_in_round(teams, "teams in round")
+        
+        group = process_group_placements(g1_round1, g1_round2)
+ 
+        print_teams_in_round(group, "----------------------------------final placements-----------------------------------------")
+        # fill_missing_team_names(group_placements)
 
-    generate_csv(group_placements)
+        outputFilename = input("Enter ouput file name: ")
+        generate_csv(group, outputFilename)
+
+    elif process_mode == '2':
+        g1_round1, g1_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
+        g2_round1, g2_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
+        all_rounds_in_group = [g1_round1, g1_round2, g2_round1, g2_round2]
+        for teams in all_rounds_in_group:
+            process_team_names(reg_list=reg_list, teams_in_round=teams)
+            # print_teams_in_round(teams, "teams in round")
+        
+        group1 = process_group_placements(g1_round1, g1_round2)
+        # print_teams_in_round(teams, "---------------------------------------------------------------------------")
+        group2 = process_group_placements(g2_round1, g2_round2)
+
+        group_placements = combine_groups(group1, group2)
+        # for team in group_placements:
+        #     print(team)
+        print_teams_in_round(group_placements, "----------------------------------final placements-----------------------------------------")
+        # fill_missing_team_names(group_placements)
+
+        outputFilename = input("Enter ouput file name: ")
+        generate_csv(group_placements, outputFilename + ".csv")
 
 
 main()
