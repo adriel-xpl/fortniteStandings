@@ -2,10 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+pysimpleguiExample.py
 # csv extensions
 *.csv
-
+*.xlsx
 # C extensions
 *.so
 

@@ -2,10 +2,12 @@ import csv
 import helperFunctions as hf
 import team as T
 import player as P
+import time
+
 
 # csvFolder = "\data\working\\""
-reg_file = "Fortnite Roster Submission (4).csv"
-reg_list = hf.process_data(reg_file)
+# reg_file = "Fortnite Roster Submission (4).csv"
+# reg_list = hf.process_data(reg_file)
 
 
 
@@ -32,10 +34,11 @@ def process_team_names(reg_list, teams_in_round):
             
             if reg[2].lower() in team_list:
                 team.team_name = reg[3]
+                team.set_location(reg[1])
                 # team.rank = str(reg[9]).strip().lower()
 
 # prints team object to the console [helper]
-def print_teams_in_round(team_list, label):
+def print_teams_in_round(team_list, label="-------"):
     print(label)
     teams_in_round = sorted(team_list, key=T.sort_by_points, reverse=True)
     for team in teams_in_round:
@@ -80,12 +83,14 @@ def fill_missing_team_names(found_teams):
 
 # generates a CSV ouput file with the necesarry columns for LeagueSpot
 def generate_csv(lst, filename="output.csv"):
-    with open(filename, mode='w', encoding='utf-16') as csv_file:
+
+    with open(filename, mode='w', encoding='utf-16', newline='') as csv_file:
         fieldnames = ['Teams', 'Placement Points', 'Elimination Points', 'Total Points', 'Players']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
         found_flag = []
+
         for team in lst:
             if not (team.get_team_name, team.get_rank) in found_flag:
                 found_flag.append((team.get_team_name, team.get_rank))
@@ -93,43 +98,43 @@ def generate_csv(lst, filename="output.csv"):
 
         print("output file generated")
 
-def main():
-    process_mode = input("do you wan to process one group or both at the same time: (1 or 2)")
+# def main():
+#     process_mode = input("do you wan to process one group or both at the same time: (1 or 2)")
 
-    if process_mode == '1':
-        g1_round1, g1_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
-        all_rounds_in_group = [g1_round1, g1_round2]
-        for teams in all_rounds_in_group:
-            process_team_names(reg_list=reg_list, teams_in_round=teams)
-            # print_teams_in_round(teams, "teams in round")
+#     if process_mode == '1':
+#         g1_round1, g1_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
+#         all_rounds_in_group = [g1_round1, g1_round2]
+#         for teams in all_rounds_in_group:
+#             process_team_names(reg_list=reg_list, teams_in_round=teams)
+#             # print_teams_in_round(teams, "teams in round")
         
-        group = process_group_placements(g1_round1, g1_round2)
+#         group = process_group_placements(g1_round1, g1_round2)
  
-        print_teams_in_round(group, "----------------------------------final placements-----------------------------------------")
-        # fill_missing_team_names(group_placements)
+#         print_teams_in_round(group, "----------------------------------final placements-----------------------------------------")
+#         # fill_missing_team_names(group_placements)
 
-        outputFilename = input("Enter ouput file name: ")
-        generate_csv(group, outputFilename)
+#         outputFilename = input("Enter ouput file name: ")
+#         generate_csv(group, outputFilename)
 
-    elif process_mode == '2':
-        g1_round1, g1_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
-        g2_round1, g2_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
-        all_rounds_in_group = [g1_round1, g1_round2, g2_round1, g2_round2]
-        for teams in all_rounds_in_group:
-            process_team_names(reg_list=reg_list, teams_in_round=teams)
-            # print_teams_in_round(teams, "teams in round")
+#     elif process_mode == '2':
+#         g1_round1, g1_round2 = initGroup("C:\Users\adrie\Downloads\OneDrive_1_6-12-2021\Gold - Group 2 - Round 1.csv", "C:\Users\adrie\Downloads\OneDrive_1_6-12-2021\Gold - Round 2 - Group 2.csv")
+#         g2_round1, g2_round2 = initGroup("SB G D2 R1.csv", "SB G D2 R2.csv")
+#         # all_rounds_in_group = [g1_round1, g1_round2, g2_round1, g2_round2]
+#         # for teams in all_rounds_in_group:
+#         #     process_team_names(reg_list=reg_list, teams_in_round=teams)
+#         #     # print_teams_in_round(teams, "teams in round")
         
-        group1 = process_group_placements(g1_round1, g1_round2)
-        # print_teams_in_round(teams, "---------------------------------------------------------------------------")
-        group2 = process_group_placements(g2_round1, g2_round2)
+#         group1 = process_group_placements(g1_round1, g1_round2)
+#         # print_teams_in_round(teams, "---------------------------------------------------------------------------")
+#         # group2 = process_group_placements(g2_round1, g2_round2)
 
-        group_placements = combine_groups(group1, group2)
-        # for team in group_placements:
-        #     print(team)
-        print_teams_in_round(group_placements, "----------------------------------final placements-----------------------------------------")
-        # fill_missing_team_names(group_placements)
+#         # group_placements = combine_groups(group1, group2)
+#         # for team in group_placements:
+#         #     print(team)
+#         print_teams_in_round(group_placements, "----------------------------------final placements-----------------------------------------")
+#         # fill_missing_team_names(group_placements)
 
-        outputFilename = input("Enter ouput file name: ")
-        generate_csv(group_placements, outputFilename + ".csv")
+#         outputFilename = input("Enter ouput file name: ")
+#         generate_csv(group_placements, outputFilename + ".csv")
 
-main()
+# main()

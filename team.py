@@ -8,6 +8,7 @@ class Team:
         self.total_kills = 0
         self.add_kill_point(int(kills))
         self.rank = rank
+        self.location = ""
 
         
 
@@ -50,12 +51,16 @@ class Team:
     
     def get_rank(self):
         return self.rank
+
+    def get_location(self):
+        return self.location
     
     def add_kill_point(self, kills):
         self.total_kills += int(kills)   
 
     def add_player(self, player):
         self.team.append(player.get_gamertag())
+        self.team.sort()
         self.add_kill_point(player.kills)     
 
     def set_placement(self, placement):
@@ -74,9 +79,12 @@ class Team:
     def set_rank(self, rank):
         self.rank = rank
     
+    def set_location(self, location):
+        self.location = location
+    
     
     def __str__(self):
-        return "Team: "+ self.team_name + ", Players: " + str(self.team) + "\nplacement: " + str(self.get_placement()) + ", total points: " + str(self.get_total_points()) + "\n"
+        return "Team: "+ self.team_name +", Location: "+ self.location +", Players: " + str(self.team) + "\nplacement: " + str(self.get_placement()) + ", total points: " + str(self.get_total_points()) + "\n"
 
 def sort_by_points(team):
     return team.get_total_points()
