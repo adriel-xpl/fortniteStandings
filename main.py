@@ -26,13 +26,12 @@ def initGroup(round1Filename, round2Filename):
     return g_round1_teams, g_round2_teams
 
 # ID's the team and gives it it's name
-def process_team_names(reg_list, teams_in_round):
+def process_team_names(reg_list, teams_in_round, rank):
     for reg in reg_list:
         for team in teams_in_round:
             team_list = team.get_team()
             team_list = [i.lower() for i in team_list]
-            
-            if reg[2].lower() in team_list:
+            if reg[2].lower() in team_list : # and rank == reg[-1].lower()                                               **test out with real data**
                 team.team_name = reg[3]
                 team.set_location(reg[1])
                 # team.rank = str(reg[9]).strip().lower()

@@ -2,6 +2,7 @@ import csv
 import team as T
 import player as P
 import re
+import openpyxl as xl
 
 
 
@@ -58,27 +59,41 @@ def create_teams(teams_list):
 
 def process_data(fileName):
     pattern = re.compile('\W')
-    with open(fileName, 'r+', encoding='utf-8') as f:
-        rows = csv.reader(f, delimiter=',')
-        registrations = []
-        for row in rows:
+    extension = fileName.split('.')[-1]
+    print(extension)
+    registrations = []
+    if extension == "xlsx":
+        wb =  xl.load_workbook(fileName)
+        wb.active
+        ws = wb.get_sheet_by_name("Sheet1")
+        for row in ws.iter_rows(min_row=0, values_only=True):
             temp_row = []
-            row[6] = re.sub(pattern, '', row[6]).lower()
-            temp_row.extend([row[2].split(' ')[0],row[5], row[6], row[7], row[8], row[9]]) #row[0] = re.sub(pattern, '', row[5]).lower()
+            temp_row.extend([str(row[2].date()), row[5], re.sub(pattern, '', row[6]).lower(), row[7], row[8], row[9]])
             registrations.append(temp_row)
             temp_row = []
+    elif extension == "csv":
+        with open(fileName, 'r+', encoding='utf-8') as f:
+            rows = csv.reader(f, delimiter=',')
+            for row in rows:
+                temp_row = []
+                row[6] = re.sub(pattern, '', row[6]).lower()
+                temp_row.extend([row[2].split(' ')[0],row[5], row[6], row[7], row[8], row[9]]) #row[0] = re.sub(pattern, '', row[5]).lower()
+                registrations.append(temp_row)
+                temp_row = []
+    else:
+        print("File Extension not supported. please pass in a valid CSV or XLSX file type")
     return registrations
 
-def process_regional_data(filename):
-    with open(fileName, 'r+', encoding='utf-8') as f:
-        rows = csv.reader(f, delimiter=',')
-        registrations = []
-        for row in rows:
-            temp_row = []
-            temp_row.extend([row[2].split(' ')[0],row[5], row[6], row[7], row[8], row[9]])
-            registrations.append(temp_row)
-            temp_row = []
-    return registrations
+# def process_regional_data(filename):
+#     with open(fileName, 'r+', encoding='utf-8') as f:
+#         rows = csv.reader(f, delimiter=',')
+#         registrations = []
+#         for row in rows:
+#             temp_row = []
+#             temp_row.extend([row[2].split(' ')[0],row[5], row[6], row[7], row[8], row[9]])
+#             registrations.append(temp_row)
+#             temp_row = []
+#     return registrations
 
 
 

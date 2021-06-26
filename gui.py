@@ -38,15 +38,23 @@ def make_window(theme):
         sg.Radio('GOLD', "ranks", default=False, key='-GOLD-', enable_events=True ),
         sg.Radio('SILVER', "ranks", default=False, key='-SILVER-', enable_events=True)
     ]]
+    uploadRegs = [[
+        sg.Button('Upload Game day Registrations', key="-regFile-"),
+        sg.Text('', size=(30,1), key="-regFilePrev-"),
+
+    ]]
+
     bypassTeamNames = [[
         sg.Checkbox('Bypass Team Name Processing', default=False, enable_events=True, key='-BYPASS-')
         
     ]]
 
+
     frames = [
         [
-            sg.Frame('Choose Your Rank', layout=checkboxes),
-            sg.Frame('Omit Team Names', layout=bypassTeamNames)
+            sg.Frame('Choose Rank', layout=checkboxes),
+            sg.Frame("Game Day Registrations (CSV or XLSX)", layout=uploadRegs),
+            sg.Frame('Omit Team Names', layout=bypassTeamNames),
         ],
         [
             sg.Frame('upload CSV files', layout=groups),
@@ -83,6 +91,9 @@ def main():
     regList = None
     all_rounds = []
 
+    regFile = None
+    rank = None
+
     grp1round1File = None
     grp1round2File = None
     grp2round1File = None
@@ -106,14 +117,17 @@ def main():
                 print(key, ' = ', values[key])
         if event in (None, 'Exit'):
             break
+        elif event == '-regFile-':
+            regFile = upload_file(window, '-regFilePrev-')
+            regList = process_data(regFile)
+            for reg in regList:
+                print(reg)
         elif event == '-GOLD-':
-            print("clicked gold radio")
-            regList = process_data('./rank_registrations/gold.csv')
-            print(regList)
+            print("clicked gold rank")
+            rank = 'gold'
         elif event == '-SILVER-':
-            print("clicked silver radio")
-            regList = process_data('./rank_registrations/silver.csv')
-            print(regList)
+            print("clicked silver rank")
+            rank = 'silver'
         elif event == '-grp1round1-':
             grp1round1File = upload_file(window, '-grp1round1prev-')
         elif event == '-grp1round2-':
@@ -133,7 +147,7 @@ def main():
                     all_rounds.extend([g2_r1_teams, g2_r2_teams])
                 if not values['-BYPASS-']:
                     for round in all_rounds:
-                        process_team_names(regList, round)
+                        process_team_names(regList, round, rank)
                 group1 = process_group_placements(g1_r1_teams, g1_r2_teams)
                 group2 = process_group_placements(g2_r1_teams, g2_r2_teams)
                 if group1 != [] and group2 != []:
@@ -151,7 +165,7 @@ def main():
                 else:
                     print("Something went wrong")
             else:
-                print("Must Choose a Rank, please try again.")
+                print("Must upload Game Day Registration File. Or choose 'Bypass Team Name Processing'.")
         elif event == "-saveFile-":
             generate_csv(cohort)
     window.close()
