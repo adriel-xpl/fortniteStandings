@@ -8,7 +8,7 @@ pysimpleguiExample.py
 *.xlsx
 # C extensions
 *.so
-
+trial.py
 # Distribution / packaging
 .Python
 build/
